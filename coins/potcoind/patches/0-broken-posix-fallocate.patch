@@ -1,0 +1,11 @@
+--- a/src/util.cpp~	2015-08-23 17:11:53.000000000 +0300
++++ b/src/util.cpp	2015-10-21 17:07:07.225237658 +0300
+@@ -1236,7 +1236,7 @@
+         fcntl(fileno(file), F_PREALLOCATE, &fst);
+     }
+     ftruncate(fileno(file), fst.fst_length);
+-#elif defined(__linux__)
++#elif defined(__linux__) && defined(__ASSUME_FALLOCATE)
+     // Version using posix_fallocate
+     off_t nEndPos = (off_t)offset + length;
+     posix_fallocate(fileno(file), 0, nEndPos);
