@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=potcoind
 PKG_VERSION:=0.8.7.2
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 PKG_LICENSE:=MIT
 PKG_MAINTAINER:=Dmitri Bogomolov <4glitch@gmail.com>
 
@@ -45,7 +45,7 @@ define Package/$(PKG_NAME)/description
 endef
 
 define Package/$(PKG_NAME)/conffiles
-	/etc/$(PROJ_NAME)/$(PROJ_NAME).conf
+	/etc/coins/$(PROJ_NAME).conf
 	/etc/config/$(PKG_NAME)
 endef
 
@@ -60,6 +60,7 @@ endef
 TARGET_CONFIGURE_OPTS += \
 	USE_SYSTEM_LEVELDB=1 \
 	BDB_LIB_SUFFIX=-4.8 \
+	BDB_INCLUDE_PATH=$(STAGING_DIR)/usr/include/db48 \
 	USE_UPNP=$(if $(CONFIG_$(PKG_NAME)_UPNP),1,-)
 
 
@@ -74,10 +75,10 @@ Build/Compile=$(call Build/Compile/Default,$(PKG_NAME))
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc/init.d \
-		$(1)/etc/$(PROJ_NAME) $(1)/etc/config
+		$(1)/etc/coins $(1)/etc/config
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin
 	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
-	$(INSTALL_CONF) ./files/$(PROJ_NAME).conf $(1)/etc/$(PROJ_NAME)/
+	$(INSTALL_CONF) ./files/$(PROJ_NAME).conf $(1)/etc/coins/
 	$(INSTALL_CONF) ./files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
 endef
 
