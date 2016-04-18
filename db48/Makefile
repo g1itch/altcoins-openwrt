@@ -64,6 +64,7 @@ CONFIGURE_ARGS += \
 	--$(if $(CONFIG_PACKAGE_libdb48xx),enable,disable)-cxx
 
 TARGET_CFLAGS += $(FPIC)
+EXTRA_CFLAGS += -Wno-format-security
 
 define Build/Compile
 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/build_unix \
@@ -83,9 +84,9 @@ define Package/libdb48xx/install
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/db.h $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/db_cxx.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/include/db48
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/db.h $(1)/usr/include/db48
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/db_cxx.h $(1)/usr/include/db48
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdb*.{a,so} $(1)/usr/lib
 endef
