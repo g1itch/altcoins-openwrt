@@ -1,0 +1,40 @@
+--- a/src/util.cpp	2016-03-21 23:41:17.000000000 +0200
++++ b/src/util.cpp	2016-04-11 14:28:07.164072067 +0300
+@@ -4,6 +4,7 @@
+ // Distributed under the MIT/X11 software license, see the accompanying
+ // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+ 
++#include <features.h>
+ #include "util.h"
+ #include "strlcpy.h"
+ #include "version.h"
+@@ -32,6 +33,7 @@
+ #include <openssl/rand.h>
+ 
+ #ifdef WIN32
++#define NOBACKTRACE
+ #ifdef _MSC_VER
+ #pragma warning(disable:4786)
+ #pragma warning(disable:4804)
+@@ -54,7 +56,11 @@
+ #include "shlwapi.h"
+ #endif
+ 
+-#ifndef WIN32
++#if !defined(__GLIBC__) || defined(__UCLIBC__)
++#define NOBACKTRACE
++#endif
++
++#ifndef NOBACKTRACE
+ #include <execinfo.h>
+ #endif
+ 
+@@ -808,7 +814,7 @@
+     printf("\n\n******* exception encountered *******\n");
+     if (fileout)
+     {
+-#ifndef WIN32
++#ifndef NOBACKTRACE
+         void* pszBuffer[32];
+         size_t size;
+         size = backtrace(pszBuffer, 32);
