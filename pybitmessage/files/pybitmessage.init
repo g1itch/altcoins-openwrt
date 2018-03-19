@@ -6,23 +6,29 @@ STOP=05
 SERVICE_STOP_TIME=300
 SERVICE_UID=nobody
 SERVICE_GID=daemon
-SERVICE_NAME=pybitmessage
-SERVICE_MATCH_NAME=1
+DAEMON=pybitmessage
+
 
 checkconfig() {
     config_get DATADIR config home
 
-    if [ ! -d $DATADIR ]; then
-        echo "${SERVICE_NAME} homedir invalid or not set: $DATADIR"
+    if [ ! -d "${DATADIR}" ]; then
+        echo "${DAEMON} homedir invalid or not set: ${DATADIR}"
         return 1
     fi
 }
 
 start() {
-    config_load "${SERVICE_NAME}"
+    config_load "${DAEMON}"
     checkconfig || return 1
 
-    export BITMESSAGE_HOME=$DATADIR
+    mkdir -p "${DATADIR}"/tmp
+    export SQLITE_TMPDIR="${DATADIR}"/tmp
+    export BITMESSAGE_HOME=${DATADIR}
     # /bin/nice -n 20
-    service_start /usr/bin/${SERVICE_NAME} -d
+    service_start /usr/bin/${DAEMON} -d
+}
+
+stop() {
+    service_stop /usr/bin/python2.7 /usr/bin/${DAEMON} -d
 }
