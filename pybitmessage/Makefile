@@ -10,11 +10,11 @@ include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=pybitmessage
 PKG_VERSION:=0.6.3.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
-PKG_COMMIT:=0da0c109952025b1132f9b02b0efd37aa2e1278e
+PKG_COMMIT:=20b5c3552f04c8fbcdf383e4c2b44e5c0749dcb6
 PKG_SOURCE:=$(PKG_COMMIT).tar.gz
-PKG_HASH:=508c79be6d22c5814c2b32e38f889eed32810a3465c555a2f2bb9e679505e344
+PKG_HASH:=a381ce2afa8e3fc419718637551eef2cc6758be557047157bbfc6b8e742d5946
 PKG_SOURCE_URL:=https://github.com/Bitmessage/pybitmessage/archive/
 PKG_BUILD_DIR:=$(BUILD_DIR)/PyBitmessage-$(PKG_COMMIT)
 
@@ -43,6 +43,8 @@ define Package/pybitmessage/conffiles
 endef
 
 define Build/Compile
+# rm -rf $(PKG_BUILD_DIR)/src/bitmessageqt \
+# 	$(PKG_BUILD_DIR)/src/bitmessagecurses
 	$(call PyBuild/Compile)
 endef
 
